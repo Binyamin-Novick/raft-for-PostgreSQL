@@ -44,6 +44,15 @@ public class elsectioncaller {
             if(m.term== sb.term.get()){
                 if(m.contents.equals("no")){
                     noV++;
+                    if(noV>sb.IDtoSocket.size())/// will need to be fixed
+                    return;
+                }else {
+                    yesV++;
+                    if(yesV>sb.IDtoSocket.size()/2){// will need to be fixe so that it is posible to have new mebers
+                        sb.statuse= serverbox.servertype.Leader;
+                        sb.term.incrementAndGet();
+                        sb.StartLeding();
+                    }
                 }
             }
         }

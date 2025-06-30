@@ -11,6 +11,10 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.Thread.sleep;
 
+/**
+ * this will tell me when i need to make a new election
+ * it will also send out the heart beats at a regulaer interval
+ */
 public class hartbox {
     serverbox sb;
     long timebetween;
@@ -18,7 +22,7 @@ public class hartbox {
 
 
     BlockingQueue<Messge> beats;
-    BlockingQueue<Messge>leders;
+
     public  hartbox(serverbox sb,BlockingQueue<Messge>beatsr){
         Random random=new Random();
         timebetween=100+ random.nextLong(400);
@@ -31,13 +35,15 @@ public class hartbox {
     }
 
 
-
+    /**
+     * this is eponsible to sees if it needs to become a candidate
+     */
    class Checking implements Runnable{
         long between;
 
        @Override
        public void run() {
-           while (sb.statuse== serverbox.servertype.Follower){
+           while (sb.statuse!= serverbox.servertype.Leader){
                between=System.currentTimeMillis()-timelastin.get();
                if(between<timebetween){
                    try {
@@ -51,6 +57,10 @@ public class hartbox {
            }
        }
    }
+
+    /**
+     * this job is to updata the bet tracker so it know it got the beat;
+     */
    class updating implements Runnable{
     Messge m;
        @Override
@@ -67,6 +77,10 @@ public class hartbox {
            }
        }
    }
+
+    /**
+     * this is the leader it will send out a bet to all the folwers in time.
+     */
 
    class beatSender implements Runnable{
 

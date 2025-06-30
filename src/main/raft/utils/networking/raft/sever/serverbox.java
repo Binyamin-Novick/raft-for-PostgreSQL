@@ -22,6 +22,8 @@ public class serverbox {
     public void Broadcast(Messge.type type, String contents){}
     public void craftMes(Messge.type type,String contnts,int who){}
 
+    public void StartLeding(){}
+
 
 
 }
