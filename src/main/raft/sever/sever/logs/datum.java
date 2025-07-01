@@ -1,4 +1,4 @@
-package raft.utils.networking.raft.sever.logs;
+package raft.sever.sever.logs;
 
 public class datum {
     String sql;

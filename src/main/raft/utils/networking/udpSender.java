@@ -1,6 +1,6 @@
 package raft.utils.networking;
 
-import raft.utils.networking.messgeing.Messge;
+import raft.sever.sever.messgeing.Messge;
 
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;

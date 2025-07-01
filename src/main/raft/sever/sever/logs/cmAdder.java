@@ -1,4 +1,4 @@
-package raft.utils.networking.raft.sever.logs;
+package raft.sever.sever.logs;
 
 /**
  * this thread peupase is to take the stuf from the non comit log and put it in the comit log when aproret
@@ -6,6 +6,10 @@ package raft.utils.networking.raft.sever.logs;
 public class cmAdder implements Runnable{
     @Override
     public void run() {
+
+    }
+
+    public void comite(){
 
     }
 }

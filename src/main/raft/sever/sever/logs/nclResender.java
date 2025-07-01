@@ -1,12 +1,14 @@
-package raft.utils.networking.raft.sever.logs;
+package raft.sever.sever.logs;
 
-import raft.utils.networking.messgeing.Messge;
-import raft.utils.networking.raft.sever.serverbox;
+import com.google.gson.Gson;
+import raft.sever.sever.messgeing.Messge;
+import raft.sever.sever.serverbox;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import static java.lang.Thread.sleep;
 
 
 /**
@@ -18,17 +20,20 @@ public class nclResender implements Runnable{
     serverbox sb;
 
     ConcurrentHashMap<Integer,Integer> quramcount;
-    BlockingQueue<Messge> nclog;
+    ConcurrentHashMap<Long,String> nclog;
+    Gson gson=new Gson();
+
     @Override
     public void run() {
 
         while (sb.statuse== serverbox.servertype.Leader){
             try {
-                wait(300);
+                if(!Thread.interrupted())
+                    sleep(300);
             } catch (InterruptedException e) {
 
-            }finally {
-                nclog.parallelStream().peek(x->sb.Broadcast(Messge.type.propuse,x.contents)).collect(Collectors.toList());
+            }finally {//
+                sb.Broadcast(Messge.type.propuse,gson.toJson(nclog.values()));
             }
         }
 

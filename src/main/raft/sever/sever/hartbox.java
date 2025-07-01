@@ -1,9 +1,7 @@
-package raft.utils.networking.raft.sever;
+package raft.sever.sever;
 
-import raft.utils.networking.messgeing.Messge;
+import raft.sever.sever.messgeing.Messge;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
