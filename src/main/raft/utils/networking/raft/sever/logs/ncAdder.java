@@ -21,6 +21,10 @@ public class ncAdder implements Runnable{
 
     }
     public void addlogL(){
+        Messge m =messgemaker();
+        quramcount.put(m.log, 0);
+        nclog.offer(m);
+
 
     }
 
@@ -33,6 +37,8 @@ public class ncAdder implements Runnable{
 
 
     }
+
+    public void catchup(){}
 
     public  void respondF(Messge messge){
         if(sb.statuse== serverbox.servertype.Follower)
