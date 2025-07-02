@@ -1,11 +1,17 @@
 package raft.sever.sever.logs;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import raft.sever.sever.messgeing.Messge;
 import raft.sever.sever.serverbox;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class ncAdder implements Runnable{
     ConcurrentHashMap<Long,Integer> quramcount;
@@ -41,7 +47,11 @@ public class ncAdder implements Runnable{
 
 
     public void addNclogF(Messge messge){
-        datum d= gson.fromJson(messge.contents, datum.class);
+        Type listType = new TypeToken<ArrayList<datum>>(){}.getType();
+        List<datum> dl= (List<datum>) gson.fromJson(messge.contents, listType);
+        List<datum>dv =dl.parallelStream().sorted(new dcom()).collect(Collectors.toList());
+        boolean catchup=false;
+        for (datum d :dv)
         if(sb.logLnc.get()>=d.log){
             if(sb.logL.get()<d.log){
                 if(sb.logLnc.get()==d.log)
@@ -53,8 +63,11 @@ public class ncAdder implements Runnable{
             respondF(messge);
 
         }else {
-            catchup();
+           catchup =true;
+           break;
         }
+        if(catchup)
+            catchup();
 
 
     }
@@ -72,5 +85,19 @@ public class ncAdder implements Runnable{
 
     public Messge messgemaker(){
         return null;
+    }
+
+
+    class dcom implements Comparator<datum>{
+
+
+        @Override
+        public int compare(datum o1, datum o2) {
+            if(o1.log>o2.log)
+                return 1;
+            if(o2.log>o1.log)
+                return -1;
+            return 0;
+        }
     }
 }
