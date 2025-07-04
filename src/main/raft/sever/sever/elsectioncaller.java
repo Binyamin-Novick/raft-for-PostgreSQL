@@ -25,6 +25,7 @@ public class elsectioncaller {
                      sb.term.incrementAndGet();
                      sb.craftMes(Messge.type.CR,"yes",m.Sid);
                      sb.hb.timelastin.set(System.currentTimeMillis());
+                     sb.leader=m.Sid;
                  }
              }else {
                  sb.craftMes(Messge.type.CR,"no",m.Sid);

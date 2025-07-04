@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class ncAdder implements Runnable{
     ConcurrentHashMap<Long,Integer> quramcount;
-    ConcurrentHashMap<Long,String> nclog;
+    ConcurrentHashMap<Long,datum> nclog;
     serverbox sb;
     BlockingQueue<Messge>proposed;
     Gson gson=new Gson();
@@ -39,7 +39,7 @@ public class ncAdder implements Runnable{
     public void addlogL(){
         Messge m =messgemaker();
         quramcount.put(m.log, 0);
-        nclog.put(m.log,m.contents);
+        nclog.put(m.log,gson.fromJson(m.contents, datum.class));
         respondF(m);
 
 
@@ -50,22 +50,22 @@ public class ncAdder implements Runnable{
         Type listType = new TypeToken<ArrayList<datum>>(){}.getType();
         List<datum> dl= (List<datum>) gson.fromJson(messge.contents, listType);
         List<datum>dv =dl.parallelStream().sorted(new dcom()).collect(Collectors.toList());
+        List<datum>dvout=new ArrayList<>();
         boolean catchup=false;
         for (datum d :dv)
         if(sb.logLnc.get()>=d.log){
-            if(sb.logL.get()<d.log){
-                if(sb.logLnc.get()==d.log)
-                    sb.logLnc.incrementAndGet();
+            if(sb.logLnc.get()==d.log)
+                sb.logLnc.incrementAndGet();
+             nclog.put(d.log, d);
+            dvout.add(d);
 
-
-                nclog.put(d.log, messge.contents);
-            }
-            respondF(messge);
 
         }else {
+
            catchup =true;
            break;
         }
+        sb.craftMes(Messge.type.propuse, gson.toJson(dvout), sb.leader );
         if(catchup)
             catchup();
 
@@ -74,8 +74,10 @@ public class ncAdder implements Runnable{
 
     public void catchup(){}
 
-    public  void respondF(Messge messge){
+    public  void respondF(Messge messge){/// worng
         if(sb.statuse== serverbox.servertype.Follower)
+
+            //this needs to  send a comit responces not a propuse back
             sb.Send(messge);
         else if(sb.statuse== serverbox.servertype.Leader) {
             sb.threads.get("nclRs").interrupt();
