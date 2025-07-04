@@ -28,9 +28,7 @@ public class hartbox {
     }
 
 
-    public void election() {
 
-    }
 
 
     /**
