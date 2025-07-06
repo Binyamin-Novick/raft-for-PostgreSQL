@@ -18,6 +18,9 @@ public class udpSender {
     public  udpSender(BlockingQueue<Messge> outbound, InetSocketAddress myad) throws SocketException {
         dgr =new DatagramSocket(myad.getPort(), myad.getAddress());
         out=outbound;
+        Thread t=new Thread(new send());
+        t.setDaemon(true);
+        t.start();
     }
 
     // have loop that will just send the stuff out;
