@@ -43,7 +43,7 @@ public class udpSender {
                 } catch (SocketException e) {
                     throw new RuntimeException(e);
                 }
-                bytes =gson.toJson(m).getBytes(StandardCharsets.UTF_8);
+                bytes =gson.toJson(m).getBytes();
                 packet =new DatagramPacket(bytes, bytes.length,m.reciver);
                 try {
                     socket.send(packet);

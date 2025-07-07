@@ -23,7 +23,7 @@ public class hartbox {
 
     public  hartbox(serverbox sb,BlockingQueue<Messge>beatsr){
         Random random=new Random();
-        timebetween=100+ random.nextLong(400);
+        timebetween=100+ random.nextLong();
 
     }
 

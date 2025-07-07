@@ -48,8 +48,9 @@ public class udpReciver {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+                String s=new String(packet.getData(), 0, packet.getLength(), StandardCharsets.UTF_8);
                 // I will eventuly replace this with a faster version; that does not need to hav 2 alices;
-               m= gson.fromJson(new InputStreamReader(new ByteArrayInputStream(packet.getData()), StandardCharsets.UTF_8),Messge.class);
+               m= gson.fromJson(s,Messge.class);
                 md.sort(m);
 
             }
